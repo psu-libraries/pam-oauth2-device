@@ -7,6 +7,7 @@ __pycache__/
 
 # C extensions
 *.so
+!pam_oauth2_device.so
 *.o
 *.a
 
