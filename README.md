@@ -1,14 +1,40 @@
 # PAM module for OAuth 2.0 Device flow
 
+This is a fork from https://github.com/stfc/pam_oauth2_device
+
 This is a PAM module that lets you log in via SSH to servers using OpenID Connect credentials, instead of SSH Keys or a username and password combination.
 
-It uses the OAuth2 Device Flow, which means that during the login process, you will click a link and log in to your OpenID Connect Provider, which will then authenticate you for the SSH session. 
+It uses the OAuth2 Device Flow, which means that during the login process, you will click a link and log in to your OpenID Connect Provider, which will then authenticate you for the SSH session.
 
 This module will then check if you're in the right group(s) or have a specified username, and allow or deny access.
 
 A demo video is avaliable here: https://drive.google.com/file/d/1WzDRL0RFDXfvUgabbXNzBppV-DKXyUN1/view?usp=sharing
 
 This code was originally developed by [Mazarykova Univerzita](https://github.com/ICS-MU/pam_oauth2_device) and [this branch](https://github.com/stfc/pam_oauth2_device) has been refactored by UKRI-STFC as a part of the [IRIS](https://www.iris.ac.uk/) activity.  This work was funded by [STFC](https://www.ukri.org/councils/stfc/), a part of [UK Research and Innovation (UKRI)](https://www.ukri.org/).
+
+# For PSU BUILD
+### Clone and Patch Source
+```bash
+git clone https://github.com/stfc/pam_oauth2_device
+```
+
+Edit `pam_oauth2_device/src/include/ldapquery.c`:
+
+1. Copy the line `attr_local = strdup(attr);` (around line 88).
+2. Paste that line between line 47 (`char *attr_local = NULL;`) and line 48 (`char *attrs[] = {attr_local, NULL};`).
+
+It should look like this:
+```c
+char *attr_local = NULL;
+attr_local = strdup(attr);
+char *attrs[] = {attr_local, NULL};
+```
+
+### Build and Install
+```bash
+cd pam_oauth2_device
+make
+make install
 
 
 ## Build
@@ -28,7 +54,7 @@ sudo dnf install gcc gcc-c++ make git
 sudo dnf install pam-devel openldap-devel libcurl-devel json-devel
 git clone https://github.com/stfc/pam_oauth2_device.git
 cd pam_oauth2_device
-make 
+make
 ```
 
 If you also want  `pamtester` (for testing, see below)
