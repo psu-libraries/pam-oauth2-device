@@ -45,6 +45,9 @@ int ldap_check_attr(void const *pamh, enum ldap_loglevel_t log,
     struct berval cred;
     struct berval **vals;
     char *attr_local = NULL;
+// PSU Modify
+    attr_local = strdup(attr);
+// PSU Modify
     char *attrs[] = {attr_local, NULL};
     const int ldap_version = LDAP_VERSION3;
 
